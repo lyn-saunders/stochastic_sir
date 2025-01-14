@@ -2,13 +2,13 @@
 % MATLAB Code with Fixes
 % All local functions defined at the end of the code
 
-% TODO - pls just change the labels to 'sections' not 'exercises' - do not change the positions of the local functions
-% TODO afterwards - section 2.2-2.5 
+% TODO - section 2.2-2.5 code needs to be written
+% TODO afterwards - look into simulating sections 2.2 and 3.2 (mean total number of deaths) to compare with the deterministic version in section 1.1
 
 clc;
 clear all;
 
-%%% Exercise 1 Part A - SIR Model Simulation
+% Section 1 - Deterministic SIR model of an epidemic
 
 % Parameters
 % Infection rate
@@ -49,24 +49,27 @@ function dXdt = sir_func(~, X, beta, gamma, mu)
 	% Total population
     N = S + I + R; 
 	
-    % Susceptible differential eq
+    % Susceptible differential equation
     dSdt = -beta * (I * S) / N; 
-	% Infected differential eq
+    
+    % Infected differential equation
     dIdt = beta * (I * S) / N - gamma * I - mu * I; 
-	% Recovered differential eq
+    
+    % Recovered differential equation
     dRdt = gamma * I; 
+	
 	% Putting results of all ODEs in a vector
     dXdt = [dSdt; dIdt; dRdt];
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Exercise 1 Part B - SIR Model Deaths Simulation
+% Section 1.1 - Total number of deaths simulation and computation
 
 % Time span and initial population
 N0 = sum(initial_conditions);
 
-% Different beta values
+% Iterate for different beta values
 figure;
 hold on;
 beta_values = [0.2, 0.5, 1, 2];
@@ -79,6 +82,7 @@ for i = 1:length(beta_values)
     disp(['Number of deaths after 200 days for beta = ', num2str(beta_local), ': ', num2str(deaths(end))]);
 end
 
+% Plot details
 xlabel('Time (Days)');
 ylabel('Number of Deaths');
 legend('Beta = 0.2', 'Beta = 0.5', 'Beta = 1', 'Beta = 2');
@@ -88,51 +92,77 @@ hold off;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Exercise 2 Part A - Stochastic SIR Model Simulations
+% Section 2 - Stochastic SIR model of an epidemic 
 
-% Two independent examples - (pass upper limit of T)
+% Create MATLAB code which simulates an epidemic as a sum of three independent Poisson processes
+
+% We create two independent examples - (pass upper limit of T)
 for k = 1:2 
     stochastic_sir_simulation(beta, gamma, mu, T(2), k); 
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Exercise 2 Part B - Analysis over 1000 Samples
+% Section 2.1 - Mean duration of the epidemic simulation and computation
 
 % Number of samples
 s = 1000; 
 
-% Part i: Mean epidemic duration
 epidemic_duration(s, T(2), beta, gamma, mu); 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Sections 2.2-2.5 will be here - the code needs to be redone for these sections
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Exercise 3 - Modified Stochastic SIR Model
+% Section 3 - Modified stochastic SIR model
 
-% Part A: Stochastic SIR with immunity vs. susceptibility
+% Unlike in Section 2, assume that each recovered individual, with equal probability, is immune or susceptible
+
 for k = 1:2
     modified_stochastic_sir_simulation(beta, gamma, mu, T(2), k); 
 end
 
-% Part B: Repeating all Exercise 2 calculations with modifications
-% Part i: Mean epidemic duration
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.1 - (Modified) mean duration of the epidemic simulation and computation
+
 modified_epidemic_duration(s, T(2), beta, gamma, mu);
 
-% Part ii: Mean total number of deaths
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.2 - (Modified) mean total number of deaths computation (and maybe simulaiton)
+
 modified_mean_deaths_calculation(s, T(2), beta, gamma, mu);
 
-% Part iii: Mean time to epidemic peak
+% Maybe create a simulation for this for varying beta values like in section 1 - then also do this for Section 2.2 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.3 - (Modified) mean time to reach peak epidemic computation
+
 modified_mean_peak_time_calculation(s, T(2), beta, gamma, mu);
 
-% Part iv: Probability of peak infected > 10
+% (apparently we need a figure for part 3 on section 2 and 3 but i dont remember why?? - look into this pls)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.4 - (Modified) peak infection proabbility computation
+
 modified_probability_peak_infected(s, T(2), beta, gamma, mu);
 
-% Part v: Vaccination rate analysis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.5 - (Modified) vaccination rate analysis
+
 modified_vaccination_rate_analysis(s, T(2), beta, gamma, mu);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Supporting Functions
+% Supporting Functions
+
+% Section 2
 
 function stochastic_sir_simulation(beta, gamma, mu, Tmax, k)
     S = 100;
@@ -179,6 +209,10 @@ function stochastic_sir_simulation(beta, gamma, mu, Tmax, k)
     title(['Stochastic SIR Model (Trial ', num2str(k), ')']);
     grid on;
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 2.1
 
 function epidemic_duration(s, Tmax, beta, gamma, mu)
     durations = zeros(1, s);
@@ -229,7 +263,9 @@ function epidemic_duration(s, Tmax, beta, gamma, mu)
     grid on;
 end
 
-%%% Supporting Functions for Modified Stochastic SIR Model
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3
 
 function modified_stochastic_sir_simulation(beta, gamma, mu, Tmax, k)
     % Modified simulation with immunity considerations
@@ -277,6 +313,10 @@ function modified_stochastic_sir_simulation(beta, gamma, mu, Tmax, k)
     title(['Modified Stochastic SIR Model (Trial ', num2str(k), ')']);
     grid on;
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.1
 
 function modified_epidemic_duration(s, Tmax, beta, gamma, mu)
     durations = zeros(1, s);
@@ -326,6 +366,9 @@ function modified_epidemic_duration(s, Tmax, beta, gamma, mu)
     grid on;
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.2
 
 function modified_mean_deaths_calculation(s, Tmax, beta, gamma, mu)
     deaths = zeros(1, s);
@@ -362,6 +405,10 @@ function modified_mean_deaths_calculation(s, Tmax, beta, gamma, mu)
     mean_deaths = mean(deaths);
     disp(['Modified Mean total number of deaths: ', num2str(mean_deaths)]);
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.3
 
 function modified_mean_peak_time_calculation(s, Tmax, beta, gamma, mu)
     peak_times = zeros(1, s);
@@ -406,6 +453,10 @@ function modified_mean_peak_time_calculation(s, Tmax, beta, gamma, mu)
     disp(['Modified Mean time to epidemic peak: ', num2str(mean_peak_time), ' days']);
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.4
+
 function modified_probability_peak_infected(s, Tmax, beta, gamma, mu)
     peaks_above_threshold = zeros(1, s);
     threshold = 10;
@@ -448,6 +499,10 @@ function modified_probability_peak_infected(s, Tmax, beta, gamma, mu)
     probability = mean(peaks_above_threshold);
     disp(['Modified Probability of peak infected > ', num2str(threshold), ': ', num2str(probability)]);
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Section 3.5
 
 function modified_vaccination_rate_analysis(s, Tmax, beta, gamma, mu)
     vaccination_rates = 0:0.01:1;
