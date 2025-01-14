@@ -1,9 +1,10 @@
+% SIR model - deterministic and stochastic dynamics and simulations
 % MATLAB Code with Fixes
 
 clc;
 clear all;
 
-%%% Exercise 1 Part A - SIR Model Simulation
+% Part 1 - SIR Model Simulation
 
 % Parameters
 % Infection rate
@@ -56,7 +57,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Exercise 1 Part B - SIR Model Deaths Simulation
+% Part 1.1 - Total Deaths Simulation and Computation
 
 % Time span and initial population
 N0 = sum(initial_conditions);
@@ -83,7 +84,7 @@ hold off;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Exercise 2 Part A - Stochastic SIR Model Simulations
+% Part 2.1 - Stochastic SIR Model Simulations as Poisson Processes
 
 % Two independent examples - (pass upper limit of T)
 for k = 1:2 
@@ -92,7 +93,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Exercise 2 Part B - Analysis over 1000 Samples
+%%% Exercise 2.2 - Analysis over 1000 Samples
 
 % Number of samples
 s = 1000; 
